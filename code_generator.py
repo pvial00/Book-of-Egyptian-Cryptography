@@ -195,16 +195,16 @@ def _betel_shift_omega(alphabet, keyword):
 def _hebew_transformation(alphabet, text, s=1):
     ''' Hebew Transformation '''
     double = _double_func_add(alphabet, text)
-    RS = _right_shift(alphabet, double)
-    LS = _left_shift(alphabet, RS)
+    RS = _right_shift_beta(alphabet, double)
+    LS = _left_shift_beta(alphabet, RS)
     return double, "".join(RS), "".join(LS)
 
 def _wind_transformation(alphabet, text, s=2):
     ''' Wind Transformation '''
     ''' Untested '''
     double = _double_func_add(alphabet, text)
-    RS = _right_shift(alphabet, double)
-    LS = _left_shift(alphabet, RS)
+    RS = _right_shift_beta(alphabet, double)
+    LS = _left_shift_beta(alphabet, RS)
     return double, "".join(RS), "".join(LS)
 
 def _radio_transformation(alphabet, text, s=2):
@@ -233,7 +233,6 @@ def _au_transformation(alphabet, text, s=2):
 
 def _betel_transformation(alphabet, text, s=2):
     ''' Betel Transformation '''
-    ''' Untested '''
     double = _double_func_add(alphabet, text)
     RS = _right_shift_alpha(alphabet, double, 5)
     LS = _left_shift_alpha(alphabet, RS, 2)
@@ -311,10 +310,12 @@ def _run():
     print("double + ", double_msg0)
     double_msg1 = _double_func_sub(list(alphabet_list), msg1)
     print("double - ", double_msg1)
+    hebewD, hebewB, hebewA = _hebew_transformation(list(alphabet_list), msg0)
+    print("Hebew Delta", hebewD)
+    print("Hebew Transformations", hebewB, hebewA)
     betelD, betelB, betelA = _betel_transformation(list(alphabet_list), msg0)
     print("Betel Delta", betelD)
     print("Betel Transformations", betelB, betelA)
-    print(alphabet_list)
     betelHeqetVenusD, betelHeqetVenusT, betelHeqetVenusB, betelHeqetVenusA = _betel_heqet_venus_transformation(list(alphabet_list), _keyword)
     print("Betel Heqet Venus Delta", betelHeqetVenusD)
     print("Betel Heqet Venus T", betelHeqetVenusT)

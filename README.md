@@ -8,5 +8,5 @@ Test moduli
 - 26
 - 32
 
-Test keyword
+Test keyword (KryptoMagick Magic Question)
 - BETEL
