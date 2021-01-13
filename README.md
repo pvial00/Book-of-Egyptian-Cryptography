@@ -7,3 +7,6 @@ In progress
 Test moduli
 - 26
 - 32
+
+Test keyword
+- BETEL
