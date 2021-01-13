@@ -1,6 +1,6 @@
 # by Uvajda (Karl Zander) - KryptoMagick 2021
 
-''' Egyptian Star Code Generator version AAA '''
+''' Egyptian Star Code Generator version AAB '''
 
 class Record:
     text ={}
