@@ -27,8 +27,9 @@ def _alphabet_generator(n):
     alphabet = {}
     alphabet_list = []
     for c in range(n):
-        letter = chr(c  + 65)
-        alphabet[c] = letter
+        x = c % 26
+        letter = chr(x  + 65)
+        alphabet[x % 26] = letter
         alphabet_list.append(letter)
     return alphabet, alphabet_list
 
@@ -82,6 +83,21 @@ def _double_func_sub(alphabet, text):
         msg.append(letter)
     return "".join(msg)
 
+def _path_shift(alphabet, text, s=1):
+    textlen = len(text)
+    msg = []
+    for x in range(textlen):
+        number = ord(text[x]) - 65
+        for y in range(s):
+            alphabet.append(alphabet.pop(0))
+        letter = alphabet[number]
+        msg.append(letter)
+    return "".join(msg)
+
+def _betel_transformation(alphabet, text, key, s=1):
+    ''' '''
+    return "".join(msg)
+
 def _run():
     _text_filename = input("Enter filename: ")
     _modulus = input("Enter modulus number: ")
@@ -100,6 +116,12 @@ def _run():
     print("phase1: m0", msg0, "phase0: m1", msg1, "phase0: m2", msg2)
     msg0, msg1, msg2 = _code_generator(msg0, alphabet, msg0, m)
     print("phase2: m0", msg0, "phase0: m1", msg1, "phase0: m2", msg2)
+    path0 = _path_shift(alphabet_list, msg0)
+    print("path0: ", path0)
+    path1 = _path_shift(alphabet_list, msg1)
+    print("path1: ", path1)
+    path2 = _path_shift(alphabet_list, msg2)
+    print("path2: ", path2)
     double_msg0 = _double_func_add(alphabet_list, msg0)
     print("double + ", double_msg0)
     double_msg1 = _double_func_sub(alphabet_list, msg1)
