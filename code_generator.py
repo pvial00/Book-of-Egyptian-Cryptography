@@ -194,9 +194,11 @@ def _betel_shift_omega(alphabet, keyword):
 
 def _hebew_transformation(alphabet, text, s=1):
     ''' Hebew Transformation '''
+    print("H")
     double = _double_func_add(alphabet, text)
     RS = _right_shift_beta(alphabet, double)
-    LS = _left_shift_beta(alphabet, RS)
+    LS = _right_shift_beta(alphabet, RS)
+    print("E")
     return double, "".join(RS), "".join(LS)
 
 def _wind_transformation(alphabet, text, s=2):
