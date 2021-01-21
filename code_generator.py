@@ -37,17 +37,29 @@ def _alphabet_generator(n):
 
 def _code_generator(text, alphabet, key, mask):
     textlen = len(text)
+    modulus = textlen
     msg = []
     if mask == 4:
         msg0 = []
         msg1 = []
         msg2 = []
+        m = []
+        msg0_m = []
+        msg1_m = []
+        msg2_m = []
+        msg0_p = []
+        msg1_p = []
+        msg2_p = []
+
         for x in range(textlen):
             number = ord(text[x]) - 65
             key_number = ord(key[x]) - 65
             output = (number + key_number) % 26
             letter = alphabet[output]
             msg0.append(letter)
+        L0 = _line_converter("".join(msg0))
+        L0_m = _line_multiplier(L0, L0, modulus)
+        L0_p = _line_power(L0, L0, modulus)
         
         for x in range(textlen):
             number = ord(text[x]) - 65
@@ -55,6 +67,9 @@ def _code_generator(text, alphabet, key, mask):
             output = (key_number - number) % 26
             letter = alphabet[output]
             msg1.append(letter)
+        L1 = _line_converter("".join(msg1))
+        L1_m = _line_multiplier(L1, L1, modulus)
+        L1_p = _line_power(L1, L1, modulus)
         
         for x in range(textlen):
             number = ord(text[x]) - 65
@@ -62,7 +77,10 @@ def _code_generator(text, alphabet, key, mask):
             output = (key_number + number) % 26
             letter = alphabet[output]
             msg2.append(letter)
-    return msg0, msg1, msg2
+        L2 = _line_converter("".join(msg2))
+        L2_m = _line_multiplier(L2, L2, modulus)
+        L2_p = _line_power(L2, L2, modulus)
+    return msg0, msg1, msg2, L0, L0_m, L0_p, L1, L1_m, L1_p, L2, L2_m, L2_p, modulus
 
 def _double_func_add(alphabet, text):
     textlen = len(text)
@@ -192,13 +210,43 @@ def _betel_shift_omega(alphabet, keyword):
         result.append(letter)
     return "".join(result)
 
+def _line_converter(line, prefix=None):
+    n = []
+    if prefix != None:
+        n.append(prefix)
+    for char in line:
+        n.append(str(ord(char) - 65))
+    return int("".join(n))
+
+def _line_multiplier(a, b, m):
+    return ((a * b) % m)
+
+def _line_power(a, b, m):
+    return pow(a, b, m)
+
+def _line_square(a):
+    return (a ** a)
+
+def _line_square_mod(a, m):
+    return ((a ** a) % m)
+
+def _line_xor(a, m):
+    return ((a ^ a))
+
+def _line_add(a, m):
+    return ((a + a) & 0xFFFFFFFFFFFFFFFF)
+
+def _line_subtract(a, m):
+    return ((a - a) & 0xFFFFFFFFFFFFFFFF)
+
+def _number_to_string(n):
+    return str(n)
+
 def _hebew_transformation(alphabet, text, s=1):
     ''' Hebew Transformation '''
-    print("H")
     double = _double_func_add(alphabet, text)
     RS = _right_shift_beta(alphabet, double)
     LS = _right_shift_beta(alphabet, RS)
-    print("E")
     return double, "".join(RS), "".join(LS)
 
 def _wind_transformation(alphabet, text, s=2):
@@ -296,12 +344,66 @@ def _run():
     
     record = _file_reader(_text_filename, record)
     alphabet, alphabet_list = _alphabet_generator(n)
-    msg0, msg1, msg2 = _code_generator(record.text, alphabet, record.keys, m)
+    msg0, msg1, msg2, L0, L0_m, L0_p, L1, L1_m, L1_p, L2, L2_m, L2_p, modulus = _code_generator(record.text, alphabet, record.keys, m)
     print("phase0: m0", msg0, "phase0: m1", msg1, "phase0: m2", msg2)
-    msg0, msg1, msg2 = _code_generator(msg0, alphabet, msg0, m)
+
+    print("Line0 as an integer ", L0)
+    print("Line1 as an integer ", L1)
+    print("Line2 as an integer ", L2)
+
+    print("Line0 multiplied ", L0_m)
+    print("Line1 multiplied ", L1_m)
+    print("Line2 multiplied ", L2_m)
+    
+    print("Line0 raised to iteself ", L0_p, " modulo line modulus", modulus)
+    print("Line1 raised to iteself ", L1_p, " modulo line modulus", modulus)
+    print("Line2 raised to iteself ", L2_p, " modulo line modulus", modulus)
+    
+    msg0, msg1, msg2, L0, L0_m, L0_p, L1, L1_m, L1_p, L2, L2_m, L2_p, modulus = _code_generator(msg0, alphabet, msg0, m)
     print("phase1: m0", msg0, "phase0: m1", msg1, "phase0: m2", msg2)
-    msg0, msg1, msg2 = _code_generator(msg0, alphabet, msg0, m)
+
+    print("Line0 as an integer ", L0)
+    print("Line1 as an integer ", L1)
+    print("Line2 as an integer ", L2)
+
+    print("Line0 multiplied ", L0_m)
+    print("Line1 multiplied ", L1_m)
+    print("Line2 multiplied ", L2_m)
+    
+    print("Line0 raised to iteself ", L0_p, " modulo line modulus", modulus)
+    print("Line1 raised to iteself ", L1_p, " modulo line modulus", modulus)
+    print("Line2 raised to iteself ", L2_p, " modulo line modulus", modulus)
+
+    msg0, msg1, msg2, L0, L0_m, L0_p, L1, L1_m, L1_p, L2, L2_m, L2_p, modulus  = _code_generator(msg0, alphabet, msg0, m)
+    
+    print("Line0 as an integer ", L0)
+    print("Line1 as an integer ", L1)
+    print("Line2 as an integer ", L2)
+
+    print("Line0 multiplied ", L0_m)
+    print("Line1 multiplied ", L1_m)
+    print("Line2 multiplied ", L2_m)
+    
+    print("Line0 raised to the power of the line modulus", L0_p)
+    print("Line1 raised to the power of the line modulus", L1_p)
+    print("Line2 raised to the power of the line modulus", L2_p)
+
     print("phase2: m0", msg0, "phase0: m1", msg1, "phase0: m2", msg2)
+    
+    print("Line0 as an integer ", L0)
+    print("Line1 as an integer ", L1)
+    print("Line2 as an integer ", L2)
+
+    print("Line0 multiplied ", L0_m)
+    print("Line1 multiplied ", L1_m)
+    print("Line2 multiplied ", L2_m)
+    
+    print("Line0 raised to itself ", L0_p, " modulo line modulus", modulus)
+    print("Line1 raised to itself ", L1_p, " modulo line modulus", modulus)
+    print("Line2 raised to itself ", L2_p, " modulo line modulus", modulus)
+    
+    print("Line modulus", modulus)
+
     path0 = _path_shift(list(alphabet_list), msg0)
     print("path0: ", path0)
     path1 = _path_shift(list(alphabet_list), msg1)
@@ -322,5 +424,18 @@ def _run():
     print("Betel Heqet Venus Delta", betelHeqetVenusD)
     print("Betel Heqet Venus T", betelHeqetVenusT)
     print("Betel Heqet Venus Transformations", betelHeqetVenusB, betelHeqetVenusA)
+    print("Line0 as an integer ", L0)
+    print("Line1 as an integer ", L1)
+    print("Line2 as an integer ", L2)
+
+    print("Line0 multiplied ", L0_m)
+    print("Line1 multiplied ", L1_m)
+    print("Line2 multiplied ", L2_m)
+    
+    print("Line0 raised to itself ", L0_p, " modulo line modulus", modulus)
+    print("Line1 raised to itself ", L1_p, " modulo line modulus", modulus)
+    print("Line2 raised to itself ", L2_p, " modulo line modulus", modulus)
+
+    print("Line modulus", modulus)
 
 _run()
