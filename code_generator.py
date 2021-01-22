@@ -1,6 +1,8 @@
 # by Uvajda (Karl Zander) - KryptoMagick 2021
 
-''' Egyptian Star Code Generator version AAB '''
+''' Egyptian Star Code Generator version AAD '''
+
+version = "AAD"
 
 class Record:
     text ={}
@@ -60,6 +62,20 @@ def _code_generator(text, alphabet, key, mask):
         L0 = _line_converter("".join(msg0))
         L0_m = _line_multiplier(L0, L0, modulus)
         L0_p = _line_power(L0, L0, modulus)
+
+        base = L0
+        itera = 1000
+        jump = 39
+
+        floor0B = _floor_makerB(base, itera, jump)
+        floor0BA = _floor_makerBA(base, itera, jump)
+        floor0BB = _floor_makerBB(base, itera, jump)
+        floor0BC = _floor_makerBC(base, itera, jump)
+        
+        wall0B = _wall_makerB(jump, itera, base)
+        wall0BA = _wall_makerBA(jump, itera, base)
+        wall0BB = _wall_makerBB(base, itera, jump)
+        wall0BC = _wall_makerBC(base, itera, jump)
         
         for x in range(textlen):
             number = ord(text[x]) - 65
@@ -71,6 +87,20 @@ def _code_generator(text, alphabet, key, mask):
         L1_m = _line_multiplier(L1, L1, modulus)
         L1_p = _line_power(L1, L1, modulus)
         
+        base = L1
+        itera = 1000
+        jump = 39
+
+        floor1B = _floor_makerB(base, itera, jump)
+        floor1BA = _floor_makerBA(base, itera, jump)
+        floor1BB = _floor_makerBB(base, itera, jump)
+        floor1BC = _floor_makerBC(base, itera, jump)
+
+        wall1B = _wall_makerB(jump, itera, base)
+        wall1BA = _wall_makerBA(jump, itera, base)
+        wall1BB = _wall_makerBB(base, itera, jump)
+        wall1BC = _wall_makerBC(base, itera, jump)
+        
         for x in range(textlen):
             number = ord(text[x]) - 65
             key_number = ord(key[x]) - 65
@@ -80,7 +110,21 @@ def _code_generator(text, alphabet, key, mask):
         L2 = _line_converter("".join(msg2))
         L2_m = _line_multiplier(L2, L2, modulus)
         L2_p = _line_power(L2, L2, modulus)
-    return msg0, msg1, msg2, L0, L0_m, L0_p, L1, L1_m, L1_p, L2, L2_m, L2_p, modulus
+        
+        base = L2
+        itera = 1000
+        jump = 39
+        
+        floor2B = _floor_makerB(base, itera, jump)
+        floor2BA = _floor_makerBA(base, itera, jump)
+        floor2BB = _floor_makerBB(base, itera, jump)
+        floor2BC = _floor_makerBC(base, itera, jump)
+        
+        wall2B = _wall_makerB(jump, itera, base)
+        wall2BA = _wall_makerBA(jump, itera, base)
+        wall2BB = _wall_makerBB(base, itera, jump)
+        wall2BC = _wall_makerBC(base, itera, jump)
+    return msg0, msg1, msg2, L0, L0_m, L0_p, L1, L1_m, L1_p, L2, L2_m, L2_p, modulus, floor0B, floor0BA, floor0BB, floor0BC, floor1B, floor1BA, floor1BB, floor1BC, floor2B, floor2BA, floor2BB, floor2BC, wall0B, wall0BA, wall0BB, wall0BC, wall1B, wall1BA, wall1BB, wall1BC, wall2B, wall2BA, wall2BB, wall2BC
 
 def _double_func_add(alphabet, text):
     textlen = len(text)
@@ -331,12 +375,78 @@ def _U_transformation(alphabet, text, s=2):
     bsB = _betel_shift_beta(alphabet, bsA)
     return double, triple, bsB, bsA
 
+def _floor_makerB(base, itera=1000, jump=39):
+    levels = []
+    for x in range(itera):
+        i = pow(base, itera, jump)
+        levels.append(i)
+    return levels
+
+def _floor_makerBA(base, itera=1000, jump=39):
+    levels = []
+    for x in range(itera):
+        i = pow(base, itera, jump)
+        levels.append(i)
+    return levels
+
+def _floor_makerBB(base, itera=1000, jump=39):
+    levels = []
+    for x in range(itera):
+        i = pow(jump, base, itera)
+        levels.append(i)
+    return levels
+
+def _floor_makerBC(base, itera=1000, jump=39):
+    levels = []
+    for x in range(itera):
+        i = pow(jump, base, itera)
+        levels.append(i)
+    return levels
+
+def _wall_makerB(jump=4, itera=1000, base=0):
+    if base == 0:
+        base += 2
+    sides = []
+    for x in range(1, itera):
+        i = pow(jump, x, base)
+        sides.append(i)
+    return sides
+
+def _wall_makerBA(jump=39, itera=1000, base=0):
+    if base == 0:
+        base += 4
+    sides = []
+    for x in range(1, itera):
+        i = pow(base, jump, x)
+        sides.append(i)
+    return sides
+
+def _wall_makerBB(base, itera=1000, jump=39):
+    if base == 0:
+        base += 8
+    sides = []
+    for x in range(1, itera):
+        i = pow(base, x, jump)
+        sides.append(i)
+    return sides
+
+def _wall_makerBC(base, itera=1000, jump=39):
+    if base == 0:
+        base += 12
+    sides = []
+    for x in range(1, itera):
+        i = pow(base, x, jump)
+        sides.append(i)
+    return sides
+
 def _run():
     _text_filename = input("Enter filename: ")
+    _output_filename = input("Enter output filename: ")
     _modulus = input("Enter modulus number: ")
     _keyword = input("Enter keyword: ")
     n = int(_modulus)
     m = 4
+    f = open(_output_filename, "w")
     
     record = Record()
     record.modulus = n
@@ -344,98 +454,192 @@ def _run():
     
     record = _file_reader(_text_filename, record)
     alphabet, alphabet_list = _alphabet_generator(n)
-    msg0, msg1, msg2, L0, L0_m, L0_p, L1, L1_m, L1_p, L2, L2_m, L2_p, modulus = _code_generator(record.text, alphabet, record.keys, m)
-    print("phase0: m0", msg0, "phase0: m1", msg1, "phase0: m2", msg2)
+    msg0, msg1, msg2, L0, L0_m, L0_p, L1, L1_m, L1_p, L2, L2_m, L2_p, modulus, floor0B, floor0BA, floor0BB, floor0BC,  floor01B, floor01BA, floor01BB, floor01BC,  floor02B, floor02BA, floor02BB, floor02BC, wall00B, wall00BA, wall00BB, wall00BC, wall01B, wall01BA, wall01BB, wall01BC, wall02B, wall02BA, wall02BB, wall02BC = _code_generator(record.text, alphabet, record.keys, m)
+    f.write("Egyptian Star Code Generator Report\n")
+    f.write("Organized by Uvajda (KryptoMagick)\n")
+    f.write("----------------------------------\n\n")
+    f.write("phase0: m0: "+str(msg0)+"\n"+"phase0: m1: "+str(msg1)+"\n"+"phase0: m2: "+str(msg2)+"\n")
 
-    print("Line0 as an integer ", L0)
-    print("Line1 as an integer ", L1)
-    print("Line2 as an integer ", L2)
+    f.write("Line0 as an integer: "+str(L0)+"\n")
+    f.write("Line1 as an integer: "+str(L1)+"\n")
+    f.write("Line2 as an integer: "+str(L2)+"\n")
 
-    print("Line0 multiplied ", L0_m)
-    print("Line1 multiplied ", L1_m)
-    print("Line2 multiplied ", L2_m)
+    f.write("Line0 multiplied: "+str(L0_m)+"\n")
+    f.write("Line1 multiplied: "+str(L1_m)+"\n")
+    f.write("Line2 multiplied by itself: "+str(L2_m)+"\n")
     
-    print("Line0 raised to iteself ", L0_p, " modulo line modulus", modulus)
-    print("Line1 raised to iteself ", L1_p, " modulo line modulus", modulus)
-    print("Line2 raised to iteself ", L2_p, " modulo line modulus", modulus)
+    f.write("Line0 raised to iteself: "+str(L0_p)+" modulo line modulus: "+str(modulus)+"\n")
+    f.write("Line1 raised to iteself: "+str(L1_p)+" modulo line modulus: "+str(modulus)+"\n")
+    f.write("Line2 raised to iteself: "+str(L2_p)+" modulo line modulus: "+str(modulus)+"\n")
     
-    msg0, msg1, msg2, L0, L0_m, L0_p, L1, L1_m, L1_p, L2, L2_m, L2_p, modulus = _code_generator(msg0, alphabet, msg0, m)
-    print("phase1: m0", msg0, "phase0: m1", msg1, "phase0: m2", msg2)
+    f.write("Line modulus: "+str(modulus)+"\n")
 
-    print("Line0 as an integer ", L0)
-    print("Line1 as an integer ", L1)
-    print("Line2 as an integer ", L2)
+    f.write("Floor0B: "+str(floor0B)+"\n")
+    f.write("Floor0BA: "+str(floor0BA)+"\n")
+    f.write("Floor0BB: "+str(floor0BB)+"\n")
+    f.write("Floor0BC: "+str(floor0BC)+"\n")
 
-    print("Line0 multiplied ", L0_m)
-    print("Line1 multiplied ", L1_m)
-    print("Line2 multiplied ", L2_m)
-    
-    print("Line0 raised to iteself ", L0_p, " modulo line modulus", modulus)
-    print("Line1 raised to iteself ", L1_p, " modulo line modulus", modulus)
-    print("Line2 raised to iteself ", L2_p, " modulo line modulus", modulus)
+    f.write("Floor01B: "+str(floor01B)+"\n")
+    f.write("Floor01BA: "+str(floor01BA)+"\n")
+    f.write("Floor01BB: "+str(floor01BB)+"\n")
+    f.write("Floor01BC: "+str(floor01BC)+"\n")
 
-    msg0, msg1, msg2, L0, L0_m, L0_p, L1, L1_m, L1_p, L2, L2_m, L2_p, modulus  = _code_generator(msg0, alphabet, msg0, m)
-    
-    print("Line0 as an integer ", L0)
-    print("Line1 as an integer ", L1)
-    print("Line2 as an integer ", L2)
+    f.write("Floor02B: "+str(floor02B)+"\n")
+    f.write("Floor02BA: "+str(floor02BA)+"\n")
+    f.write("Floor02BB: "+str(floor02BB)+"\n")
+    f.write("Floor02BC: "+str(floor02BC)+"\n")
 
-    print("Line0 multiplied ", L0_m)
-    print("Line1 multiplied ", L1_m)
-    print("Line2 multiplied ", L2_m)
-    
-    print("Line0 raised to the power of the line modulus", L0_p)
-    print("Line1 raised to the power of the line modulus", L1_p)
-    print("Line2 raised to the power of the line modulus", L2_p)
+    f.write("Wall00B: "+str(wall00B)+"\n")
+    f.write("Wall00BA: "+str(wall00BA)+"\n")
+    f.write("Wall00BB: "+str(wall00BB)+"\n")
+    f.write("Wall00BC: "+str(wall00BC)+"\n")
 
-    print("phase2: m0", msg0, "phase0: m1", msg1, "phase0: m2", msg2)
-    
-    print("Line0 as an integer ", L0)
-    print("Line1 as an integer ", L1)
-    print("Line2 as an integer ", L2)
+    f.write("Floor01B: "+str(floor01B)+"\n")
+    f.write("Floor01BA: "+str(floor01BA)+"\n")
+    f.write("Floor01BB: "+str(floor01BB)+"\n")
+    f.write("Floor01BC: "+str(floor01BC)+"\n")
 
-    print("Line0 multiplied ", L0_m)
-    print("Line1 multiplied ", L1_m)
-    print("Line2 multiplied ", L2_m)
+    f.write("Wall01B: "+str(wall01B)+"\n")
+    f.write("Wall01BA: "+str(wall01BA)+"\n")
+    f.write("Wall01BB: "+str(wall01BB)+"\n")
+    f.write("Wall01BC: "+str(wall01BC)+"\n")
+
+    f.write("Floor02B: "+str(floor02B)+"\n")
+    f.write("Floor02BA: "+str(floor02BA)+"\n")
+    f.write("Floor02BB: "+str(floor02BB)+"\n")
+    f.write("Floor02BC: "+str(floor02BC)+"\n")
+
+    f.write("Wall02B: "+str(wall02B)+"\n")
+    f.write("Wall02BA: "+str(wall02BA)+"\n")
+    f.write("Wall02BB: "+str(wall02BB)+"\n")
+    f.write("Wall02BC: "+str(wall02BC)+"\n")
+
+    msg0, msg1, msg2, L0, L0_m, L0_p, L1, L1_m, L1_p, L2, L2_m, L2_p, modulus, floor1B, floor1BA, floor1BB, floor1BC, floor11B, floor11BA, floor11BB, floor11BC, floor12B, floor12BA, floor12BB, floor12BC,  wall10B, wall10BA, wall10BB, wall10BC, wall11B, wall11BA, wall11BB, wall11BC, wall12B, wall12BA, wall12BB, wall12BC  = _code_generator(msg0, alphabet, msg0, m)
+    f.write("phase1: m0: "+str(msg0)+"\n"+"phase0: m1: "+str(msg1)+"\n"+"phase0: m2: "+str(msg2)+"\n")
+
+    f.write("Line0 as an integer "+str(L0)+"\n")
+    f.write("Line1 as an integer "+str(L1)+"\n")
+    f.write("Line2 as an integer "+str(L2)+"\n")
+
+    f.write("Line0 multiplied "+str(L0_m)+"\n")
+    f.write("Line1 multiplied "+str(L1_m)+"\n")
+    f.write("Line2 multiplied "+str(L2_m)+"\n")
     
-    print("Line0 raised to itself ", L0_p, " modulo line modulus", modulus)
-    print("Line1 raised to itself ", L1_p, " modulo line modulus", modulus)
-    print("Line2 raised to itself ", L2_p, " modulo line modulus", modulus)
+    f.write("Line0 raised to iteself "+str(L0_p)+" modulo line modulus"+str(modulus)+"\n")
+    f.write("Line1 raised to iteself "+str(L1_p)+" modulo line modulus"+str(modulus)+"\n")
+    f.write("Line2 raised to iteself "+str(L2_p)+" modulo line modulus"+str(modulus)+"\n")
+
+    f.write("Line modulus"+str(modulus)+"\n")
+
+    f.write("Floor1B: "+str(floor1B)+"\n")
+    f.write("Floor1BA: "+str(floor1BA)+"\n")
+    f.write("Floor1BB: "+str(floor1BB)+"\n")
+    f.write("Floor1BC: "+str(floor1BC)+"\n")
+
+    f.write("Wall10B: "+str(wall10B)+"\n")
+    f.write("Wall10BA: "+str(wall10BA)+"\n")
+    f.write("Wall10BB: "+str(wall10BB)+"\n")
+    f.write("Wall10BC: "+str(wall10BC)+"\n")
+
+    f.write("Floor11B: "+str(floor11B)+"\n")
+    f.write("Floor11BA: "+str(floor11BA)+"\n")
+    f.write("Floor11BB: "+str(floor11BB)+"\n")
+    f.write("Floor11BC: "+str(floor11BC)+"\n")
+
+    f.write("Wall11B: "+str(wall11B)+"\n")
+    f.write("Wall11BA: "+str(wall11BA)+"\n")
+    f.write("Wall11BB: "+str(wall11BB)+"\n")
+    f.write("Wall11BC: "+str(wall11BC)+"\n")
+
+    f.write("Floor12B: "+str(floor12B)+"\n")
+    f.write("Floor12BA: "+str(floor12BA)+"\n")
+    f.write("Floor12BB: "+str(floor12BB)+"\n")
+    f.write("Floor12BC: "+str(floor12BC)+"\n")
+
+    f.write("Wall12B: "+str(wall12B)+"\n")
+    f.write("Wall12BA: "+str(wall12BA)+"\n")
+    f.write("Wall12BB: "+str(wall12BB)+"\n")
+    f.write("Wall12BC: "+str(wall12BC)+"\n")
+
+    msg0, msg1, msg2, L0, L0_m, L0_p, L1, L1_m, L1_p, L2, L2_m, L2_p, modulus, floor2B, floor2BA, floor2BB, floor2BC, floor21B, floor21BA, floor21BB, floor21BC, floor22B, floor22BA, floor22BB, floor22BC, wall20B, wall20BA, wall20BB, wall20BC, wall21B, wall21BA, wall21BB, wall21BC, wall22B, wall22BA, wall22BB, wall22BC = _code_generator(msg0, alphabet, msg0, m)
     
-    print("Line modulus", modulus)
+    f.write("Line0 as an integer "+str(L0)+"\n")
+    f.write("Line1 as an integer "+str(L1)+"\n")
+    f.write("Line2 as an integer "+str(L2)+"\n")
+
+    f.write("Line0 multiplied "+str(L0_m)+"\n")
+    f.write("Line1 multiplied "+str(L1_m)+"\n")
+    f.write("Line2 multiplied "+str(L2_m)+"\n")
+    
+    f.write("Line0 raised to the power of the line modulus: "+str(L0_p)+"\n")
+    f.write("Line1 raised to the power of the line modulus: "+str(L1_p)+"\n")
+    f.write("Line2 raised to the power of the line modulus: "+str(L2_p)+"\n")
+
+    f.write("phase2: m0: "+str(msg0)+"phase0: m1: "+str(msg1)+"phase0: m2: "+str(msg2)+"\n")
+    
+    f.write("Line0 as an integer: "+str(L0)+"\n")
+    f.write("Line1 as an integer: "+str(L1)+"\n")
+    f.write("Line2 as an integer: "+str(L2)+"\n")
+
+    f.write("Line0 multiplied by itself: "+str(L0_m)+"\n")
+    f.write("Line1 multiplied by itself: "+str(L1_m)+"\n")
+    f.write("Line2 multiplied by itself: "+str(L2_m)+"\n")
+    
+    f.write("Line0 raised to itself: "+str(L0_p)+" modulo line modulus: "+str(modulus)+"\n")
+    f.write("Line1 raised to itself: "+str(L1_p)+" modulo line modulus: "+str(modulus)+"\n")
+    f.write("Line2 raised to itself: "+str(L2_p)+" modulo line modulus: "+str(modulus)+"\n")
+    
+    f.write("Line modulus: "+str(modulus)+"\n")
+
+    f.write("Floor2B: "+str(floor2B)+"\n")
+    f.write("Floor2BA: "+str(floor2BA)+"\n")
+    f.write("Floor2BB: "+str(floor2BB)+"\n")
+    f.write("Floor2BC: "+str(floor2BC)+"\n")
+
+    f.write("Wall20B: "+str(wall20B)+"\n")
+    f.write("Wall20BA: "+str(wall20BA)+"\n")
+    f.write("Wall20BB: "+str(wall20BB)+"\n")
+    f.write("Wall20BC: "+str(wall20BC)+"\n")
+
+    f.write("Floor21B: "+str(floor21B)+"\n")
+    f.write("Floor21BA: "+str(floor21BA)+"\n")
+    f.write("Floor21BB: "+str(floor21BB)+"\n")
+    f.write("Floor21BC: "+str(floor21BC)+"\n")
+
+    f.write("Wall21B: "+str(wall21B)+"\n")
+    f.write("Wall21BA: "+str(wall21BA)+"\n")
+    f.write("Wall21BB: "+str(wall21BB)+"\n")
+    f.write("Wall21BC: "+str(wall21BC)+"\n")
+
+    f.write("Floor22B: "+str(floor22B)+"\n")
+    f.write("Floor22BA: "+str(floor22BA)+"\n")
+    f.write("Floor22BB: "+str(floor22BB)+"\n")
+    f.write("Floor22BC: "+str(floor22BC)+"\n")
+
+    f.write("Wall22B: "+str(wall22B)+"\n")
+    f.write("Wall22BA: "+str(wall22BA)+"\n")
+    f.write("Wall22BB: "+str(wall22BB)+"\n")
+    f.write("Wall22BC: "+str(wall22BC)+"\n")
 
     path0 = _path_shift(list(alphabet_list), msg0)
-    print("path0: ", path0)
+    f.write("path0: :"+path0+"\n")
     path1 = _path_shift(list(alphabet_list), msg1)
-    print("path1: ", path1)
+    f.write("path1: :"+path1+"\n")
     path2 = _path_shift(list(alphabet_list), msg2)
-    print("path2: ", path2)
+    f.write("path2: :"+path2+"\n")
     double_msg0 = _double_func_add(list(alphabet_list), msg0)
-    print("double + ", double_msg0)
+    f.write("double + :"+double_msg0+"\n")
     double_msg1 = _double_func_sub(list(alphabet_list), msg1)
-    print("double - ", double_msg1)
+    f.write("double - :"+double_msg1+"\n")
     hebewD, hebewB, hebewA = _hebew_transformation(list(alphabet_list), msg0)
-    print("Hebew Delta", hebewD)
-    print("Hebew Transformations", hebewB, hebewA)
+    f.write("Hebew Delta: "+hebewD+"\n")
+    f.write("Hebew Transformations: "+hebewB+hebewA+"\n")
     betelD, betelB, betelA = _betel_transformation(list(alphabet_list), msg0)
-    print("Betel Delta", betelD)
-    print("Betel Transformations", betelB, betelA)
+    f.write("Betel Delta: "+betelD+"\n")
+    f.write("Betel Transformations: "+betelB+" "+betelA+"\n")
     betelHeqetVenusD, betelHeqetVenusT, betelHeqetVenusB, betelHeqetVenusA = _betel_heqet_venus_transformation(list(alphabet_list), _keyword)
-    print("Betel Heqet Venus Delta", betelHeqetVenusD)
-    print("Betel Heqet Venus T", betelHeqetVenusT)
-    print("Betel Heqet Venus Transformations", betelHeqetVenusB, betelHeqetVenusA)
-    print("Line0 as an integer ", L0)
-    print("Line1 as an integer ", L1)
-    print("Line2 as an integer ", L2)
-
-    print("Line0 multiplied ", L0_m)
-    print("Line1 multiplied ", L1_m)
-    print("Line2 multiplied ", L2_m)
-    
-    print("Line0 raised to itself ", L0_p, " modulo line modulus", modulus)
-    print("Line1 raised to itself ", L1_p, " modulo line modulus", modulus)
-    print("Line2 raised to itself ", L2_p, " modulo line modulus", modulus)
-
-    print("Line modulus", modulus)
+    f.write("Betel Heqet Venus Delta: "+betelHeqetVenusD+"\n")
+    f.write("Betel Heqet Venus T: "+betelHeqetVenusT+"\n")
+    f.write("Betel Heqet Venus Transformations: "+betelHeqetVenusB+" "+betelHeqetVenusA+"\n")
 
 _run()
