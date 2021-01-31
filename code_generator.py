@@ -2,7 +2,7 @@
 
 ''' Egyptian Star Code Generator version AAD '''
 
-version = "AAD"
+version = "AAE"
 
 class Record:
     text ={}
@@ -438,6 +438,9 @@ def _wall_makerBC(base, itera=1000, jump=39):
         i = pow(base, x, jump)
         sides.append(i)
     return sides
+
+def _wall_message_converter(sides):
+    return None
 
 def _run():
     _text_filename = input("Enter filename: ")
