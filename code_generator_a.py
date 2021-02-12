@@ -213,7 +213,7 @@ def _left_shift_alpha(alphabet, text, s):
 def _betel_shift_alpha(alphabet, keyword):
     result = []
     textlen = len(keyword)
-    shift_order = [1, 9, 0, 9, 0]
+    shift_order = [1, 9, 0, 9, 0, 0, 0, 0, 0]
     for x in range(5):
         number = ord(keyword[x]) - 65
         output = (number + shift_order[x]) % 26
@@ -224,7 +224,7 @@ def _betel_shift_alpha(alphabet, keyword):
 def _betel_shift_beta(alphabet, keyword):
     result = []
     textlen = len(keyword)
-    shift_order = [0, 0, 9, 0, 0]
+    shift_order = [0, 0, 9, 0, 0, 0, 0, 0, 0]
     for x in range(5):
         number = ord(keyword[x]) - 65
         output = (number - shift_order[x]) % 26
@@ -235,7 +235,7 @@ def _betel_shift_beta(alphabet, keyword):
 def _betel_shift_gamma(alphabet, keyword):
     result = []
     textlen = len(keyword)
-    shift_order = [2, 10, 2, 10, 1]
+    shift_order = [2, 10, 2, 10, 1, 0, 0, 0 ,0]
     for x in range(5):
         number = ord(keyword[x]) - 65
         output = (number - shift_order[x]) % 26
@@ -246,7 +246,7 @@ def _betel_shift_gamma(alphabet, keyword):
 def _betel_shift_omega(alphabet, keyword):
     result = []
     textlen = len(keyword)
-    shift_order = [0, 10, 0, 10, 0]
+    shift_order = [0, 10, 0, 10, 0, 0, 0, 0, 0]
     for x in range(5):
         number = ord(keyword[x]) - 65
         output = (number - shift_order[x]) % 26
@@ -581,9 +581,9 @@ def _run():
     f.write("Line1 multiplied "+str(L1_m)+"\n")
     f.write("Line2 multiplied "+str(L2_m)+"\n")
     
-    f.write("Line0 raised to iteself "+str(L0_p)+" modulo line modulus: "+str(modulus)+"\n")
-    f.write("Line1 raised to iteself "+str(L1_p)+" modulo line modulus: "+str(modulus)+"\n")
-    f.write("Line2 raised to iteself "+str(L2_p)+" modulo line modulus: "+str(modulus)+"\n")
+    f.write("Line0 raised to iteself "+str(L0_p)+" modulo line modulus"+str(modulus)+"\n")
+    f.write("Line1 raised to iteself "+str(L1_p)+" modulo line modulus"+str(modulus)+"\n")
+    f.write("Line2 raised to iteself "+str(L2_p)+" modulo line modulus"+str(modulus)+"\n")
 
     f.write("Line modulus"+str(modulus)+"\n")
 
