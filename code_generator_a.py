@@ -514,7 +514,7 @@ def _run():
     f.write("Egyptian Star Code Generator Report\n")
     f.write("Organized by Uvajda (KryptoMagick)\n")
     f.write("----------------------------------\n\n")
-    f.write("phase0: m0: "+str(msg0)+"\n"+"phase0: m1: "+str(msg1)+"\n"+"phase0: m2: "+str(msg2)+"\n")
+    f.write("phase0: m0: "+str(msg0)+"\n "+"phase0: m1: "+str(msg1)+"\n "+"phase0: m2: "+str(msg2)+"\n")
 
     f.write("Line0 as an integer: "+str(L0)+"\n")
     f.write("Line1 as an integer: "+str(L1)+"\n")
@@ -573,17 +573,17 @@ def _run():
     msg0, msg1, msg2, L0, L0_m, L0_p, L1, L1_m, L1_p, L2, L2_m, L2_p, modulus, floor1B, floor1BA, floor1BB, floor1BC, floor11B, floor11BA, floor11BB, floor11BC, floor12B, floor12BA, floor12BB, floor12BC,  wall10B, wall10BA, wall10BB, wall10BC, wall11B, wall11BA, wall11BB, wall11BC, wall12B, wall12BA, wall12BB, wall12BC  = _code_generator(msg0, alphabet, msg0, m)
     f.write("phase1: m0: "+str(msg0)+"\n"+"phase0: m1: "+str(msg1)+"\n"+"phase0: m2: "+str(msg2)+"\n")
 
-    f.write("Line0 as an integer "+str(L0)+"\n")
-    f.write("Line1 as an integer "+str(L1)+"\n")
-    f.write("Line2 as an integer "+str(L2)+"\n")
+    f.write("Line0 as an integer: "+str(L0)+"\n")
+    f.write("Line1 as an integer: "+str(L1)+"\n")
+    f.write("Line2 as an integer: "+str(L2)+"\n")
 
-    f.write("Line0 multiplied "+str(L0_m)+"\n")
-    f.write("Line1 multiplied "+str(L1_m)+"\n")
-    f.write("Line2 multiplied "+str(L2_m)+"\n")
+    f.write("Line0 multiplied: "+str(L0_m)+"\n")
+    f.write("Line1 multiplied: "+str(L1_m)+"\n")
+    f.write("Line2 multiplied: "+str(L2_m)+"\n")
     
-    f.write("Line0 raised to iteself "+str(L0_p)+" modulo line modulus"+str(modulus)+"\n")
-    f.write("Line1 raised to iteself "+str(L1_p)+" modulo line modulus"+str(modulus)+"\n")
-    f.write("Line2 raised to iteself "+str(L2_p)+" modulo line modulus"+str(modulus)+"\n")
+    f.write("Line0 raised to iteself "+str(L0_p)+" modulo line modulus: "+str(modulus)+"\n")
+    f.write("Line1 raised to iteself "+str(L1_p)+" modulo line modulus: "+str(modulus)+"\n")
+    f.write("Line2 raised to iteself "+str(L2_p)+" modulo line modulus: "+str(modulus)+"\n")
 
     f.write("Line modulus"+str(modulus)+"\n")
 
@@ -619,9 +619,9 @@ def _run():
 
     msg0, msg1, msg2, L0, L0_m, L0_p, L1, L1_m, L1_p, L2, L2_m, L2_p, modulus, floor2B, floor2BA, floor2BB, floor2BC, floor21B, floor21BA, floor21BB, floor21BC, floor22B, floor22BA, floor22BB, floor22BC, wall20B, wall20BA, wall20BB, wall20BC, wall21B, wall21BA, wall21BB, wall21BC, wall22B, wall22BA, wall22BB, wall22BC = _code_generator(msg0, alphabet, msg0, m)
     
-    f.write("Line0 as an integer "+str(L0)+"\n")
-    f.write("Line1 as an integer "+str(L1)+"\n")
-    f.write("Line2 as an integer "+str(L2)+"\n")
+    f.write("Line0 as an integer: "+str(L0)+"\n")
+    f.write("Line1 as an integer: "+str(L1)+"\n")
+    f.write("Line2 as an integer: "+str(L2)+"\n")
 
     f.write("Line0 multiplied "+str(L0_m)+"\n")
     f.write("Line1 multiplied "+str(L1_m)+"\n")
