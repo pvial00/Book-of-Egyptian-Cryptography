@@ -1,8 +1,8 @@
 # by Uvajda (Karl Zander) - KryptoMagick 2021
 
-''' Egyptian Star Code Generator version AAF '''
+''' Egyptian Star Code Generator version AAG '''
 
-version = "AAF"
+version = "AAG"
 
 class Record:
     text ={}
@@ -298,6 +298,17 @@ def _moon_shift_delta(alphabet, keyword):
         result.append(letter)
     return "".join(result)
 
+def _solar_wind_shift(alphabet, keyword):
+    result = []
+    textlen = len(keyword)
+    shift_order = [7, 16]
+    for x in range(2):
+        number = ord(keyword[x]) - 65
+        output = (number + shift_order[x]) % 26
+        letter = alphabet[output]
+        result.append(letter)
+    return "".join(result)
+
 def _line_converter(line, prefix=None):
     n = []
     if prefix != None:
@@ -427,6 +438,11 @@ def _moon_transformation(alphabet, text, s=2):
     msG = _moon_shift_gamma(alphabet, msB)
     msD = _moon_shift_delta(alphabet, msG)
     return msA, msB, msD
+
+def _solar_transformation(alphabet, text, s=2):
+    ''' Solar Transformation '''
+    solarW = _solar_wind_shift(alphabet, text[:2])
+    return solarW
 
 def _floor_makerB(base, itera=1000, jump=39):
     levels = []
@@ -689,6 +705,8 @@ def _run():
     f.write("double - :"+double_msg1+"\n")
     moonB, moonA, moonG = _moon_transformation(list(alphabet_list), _keyword)
     f.write("Moon Transformations: "+moonB+" "+moonA+" "+moonG+"\n")
+    solarW = _solar_transformation(list(alphabet_list), _keyword)
+    f.write("Solar Transformation: "+solarW+"\n")
     hebewD, hebewB, hebewA = _hebew_transformation(list(alphabet_list), msg0)
     f.write("Hebew Delta: "+hebewD+"\n")
     f.write("Hebew Transformations: "+hebewB+hebewA+"\n")
